@@ -116,7 +116,6 @@ public class AdressBookMain {
             choice = Integer.parseInt(name);
             switch (choice) {
                 case 1:
-                    System.out.println("Give the information for the Person");
                     AdressBookMain p1 = new AdressBookMain();
                     p1.addPerson();
                     break;
