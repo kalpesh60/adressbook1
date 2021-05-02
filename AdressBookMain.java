@@ -135,6 +135,15 @@ class AddressData {
             }
         }
 
+        public void deleteContact () {
+            if (checkNameAvailability ()) {
+                contacts.remove(edit);
+                System.out.println ("Successfully Deleted The Contact");
+            } else {
+                System.out.println ("Name not Found!!");
+            }
+        }
+
         public boolean checkNameAvailability () {
             System.out.println("Enter Name: ");
             name = sc.nextLine ();
@@ -147,25 +156,28 @@ class AddressData {
             return false;
         }
 
-    public static void main(String[] args) {
-        System.out.println("Welcome to Address book Program");
-        Scanner sc = new Scanner(System.in);
-        AdressBookMain ab = new AdressBookMain();
-        while (true) {
-            System.out.println(" Enter 1 to Add Contact\n Enter 2 to Edit Contact\n Enter 3 to Exit\n");
-            int choice = sc.nextInt();
-            switch (choice) {
-                case 1:
-                    ab.addContact();
-                    ab.printContact();
-                    break;
-                case 2:
-                    ab.EditContact();
-                    ab.printContact();
-                    break;
-                case 3:
-                    System.exit(0);
-                    break;
+        public static void main(String[] args) {
+            System.out.println("Welcome to Address book Program");
+            Scanner sc = new Scanner(System.in);
+            AdressBookMain ab = new AdressBookMain();
+            while (true) {
+                System.out.println(" Enter 1 to Add Contact\n Enter 2 to Edit Contact\n Enter 3 to Delete\n Enter 4 to Exit\n");
+                int choice = sc.nextInt();
+                switch (choice) {
+                    case 1:
+                        ab.addContact();
+                        ab.printContact();
+                        break;
+                    case 2:
+                        ab.EditContact();
+                        ab.printContact();
+                        break;
+                    case 3:
+                        ab.deleteContact();
+                        ab.printContact();
+                    case 4:
+                        System.exit(0);
+                        break;
                 }
             }
         }
