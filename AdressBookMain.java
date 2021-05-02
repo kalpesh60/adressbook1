@@ -76,11 +76,28 @@ class AddressData {
         return ("Your Entered Details Are\nFirst Name: " + name + "\nLast Name: " + surname + "\naddress: " + address + "\nCity: " + city + "\nState: " + state + "\nZip Code: " + zipCode + "\nPhone Number :" + phoneNumber + "\nEmail: " + email + "\n");
     }
 
-    public static class AdressBookMain {
-        public ArrayList <AddressData> contacts = new ArrayList<> ();
-        Scanner sc = new Scanner (System.in);
-        private String name;
-        public int edit;
+    static class MultipleAddressBook {
+        ArrayList <AddressData> contacts = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        int edit;
+        String fullName;
+        String name;
+
+        public MultipleAddressBook(String name) {
+            this.name = name;
+        }
+
+        public boolean checkNameAvailability() {
+            System.out.println("Enter Name: ");
+            name = sc.nextLine();
+            for (edit = 0; edit < contacts.size(); edit++) {
+                if ( name.equals(contacts.get(edit).getname())) {
+                    System.out.println("Contact exists");
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void addContact() {
             if (!checkNameAvailability()) {
@@ -99,15 +116,6 @@ class AddressData {
                 System.out.println("Enter email: ");
                 String email = sc.nextLine();
                 contacts.add(new AddressData(name, address, city, state, zipCode, phoneNumber, email));
-            }
-        }
-
-        public void printContact() {
-            if (contacts.isEmpty()) {
-                System.out.println("Not found");
-            }
-            for (AddressData showContacts : contacts) {
-                System.out.println("\n" + showContacts + "\n");
             }
         }
 
@@ -135,47 +143,90 @@ class AddressData {
             }
         }
 
-        public void deleteContact () {
-            if (checkNameAvailability ()) {
-                contacts.remove(edit);
-                System.out.println ("Successfully Deleted The Contact");
-            } else {
-                System.out.println ("Name not Found!!");
-            }
-        }
-
-        public boolean checkNameAvailability () {
-            System.out.println("Enter Name: ");
-            name = sc.nextLine ();
-            for (edit = 0; edit < contacts.size (); edit++) {
-                if ( name.equals(contacts.get(edit).getname () )) {
-                    System.out.println("Contact exists");
-                    return true;
+        public void deleteContact() {
+            System.out.println("Enter the name of contact You want to Delete: ");
+            for (edit = 0; edit < contacts.size(); edit++) {
+                if (checkNameAvailability()) {
+                    contacts.remove(edit);
+                    System.out.println("Successfully Deleted The Contact");
                 }
             }
-            return false;
         }
 
+        public void printContacts() {
+            System.out.println("Contacts in address book are: ");
+            if (contacts.isEmpty()) {
+                System.out.println("No Contact Found");
+            }
+            for (AddressData showContacts : contacts) {
+                System.out.println("\n" + showContacts + "\n");
+            }
+        }
+    }
+
+    public static class AdressBookMain {
+        public static ArrayList <MultipleAddressBook> AddressBookName = new ArrayList<> ();
+        static Scanner sc = new Scanner (System.in);
+        public int edit;
+        int count = 0;
+
+
         public static void main(String[] args) {
+            AdressBookMain menu = new AdressBookMain();
+            menu.menu();
+        }
+
+        public void multipleAddressBook() {
+            String name;
+            System.out.print("Enter the name of Address Book: ");
+            name = sc.nextLine();
+            AddressBookName.add(new MultipleAddressBook(name));
+            System.out.println("New Address Book Created with name: " + name);
+        }
+
+        public void printMultipleAddressBooks() {
+            System.out.println("These Are the Address Books present: ");
+            if (AddressBookName.isEmpty()) {
+                System.out.println("No AddressBooks Stored yet");
+            }
+            for (int i = 0; i < AddressBookName.size(); i++) {
+                System.out.println(i + " - " + AddressBookName.get(count));
+            }
+        }
+
+        public void SelectAddressBook() {
+            System.out.println("You are Currently in " + AddressBookName.get(count) + " AddressBook");
+            if (AddressBookName.size() > 0) {
+                for (int i = 0; i < AddressBookName.size(); i++)
+                    System.out.println(i + " - "+ AddressBookName.get(i));
+                    System.out.print("Pick Address Book Number = ");
+                    count = Integer.parseInt(sc.next());
+            }
+        }
+
+        public void menu() {
             System.out.println("Welcome to Address book Program");
-            Scanner sc = new Scanner(System.in);
-            AdressBookMain ab = new AdressBookMain();
+            multipleAddressBook();
             while (true) {
-                System.out.println(" Enter 1 to Add Contact\n Enter 2 to Edit Contact\n Enter 3 to Delete\n Enter 4 to Exit\n");
+                System.out.println(" Enter 1 to Add Contact\n Enter 2 to Edit Contact\n Enter 3 to Delete\n Enter 4 to Add Addressbook\n Enter 5 to see Addressbooks\n Enter 6 to Exit");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
-                        ab.addContact();
-                        ab.printContact();
+                        SelectAddressBook();
+                        AddressBookName.get(count).addContact();
                         break;
                     case 2:
-                        ab.EditContact();
-                        ab.printContact();
+                        AddressBookName.get(count).EditContact();
                         break;
                     case 3:
-                        ab.deleteContact();
-                        ab.printContact();
+                        AddressBookName.get(count).deleteContact();
                     case 4:
+                        multipleAddressBook();
+                    case 5:
+                        System.out.println(AddressBookName.get(count) + "book");
+                        SelectAddressBook();
+                        AddressBookName.get(count).printContacts();
+                    case 6:
                         System.exit(0);
                         break;
                 }
